@@ -1,0 +1,7 @@
+{
+    "DEBUG": true,
+    "SQLALCHEMY_DATABASE_URI": "sqlite:///../sample.sqlite",
+    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
+    "SECRET_KEY": "Super secret key",
+    "JWT_AUTH_URL_RULE": null
+}

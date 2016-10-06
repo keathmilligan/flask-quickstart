@@ -1,0 +1,7 @@
+**/__pycache__/
+.vscode/
+.virtualenv/
+.cache/
+.eggs/
+*.egg-info/
+sample.sqlite
