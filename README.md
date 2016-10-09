@@ -13,6 +13,9 @@ Features:
 
 This is a "pure RESTful" application, it exposes only RESTful APIs and does not generate any HTML, perfect for pairing with a single-page-application (SPA) web front-end or mobile app.
 
+See [RESTful Flask application quick-start](http://keathmilligan.net/restful-flask-application-quick-start/) for more info.
+
+
 ## Getting Started
 
 You will need Python 3.x. Use the appropriate installation method for your system to install the latest Python (e.g. 3.5.2) and make sure it is in your path.
