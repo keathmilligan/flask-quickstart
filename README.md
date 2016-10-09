@@ -38,7 +38,7 @@ or
 python -m venv .virtualenv
 ```
 
-if the `pyvenv` command does not existing on your system.
+if the `pyvenv` command does not exist on your system.
 
 ### Activate the Virtual Environment
 
