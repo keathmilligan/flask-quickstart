@@ -5,3 +5,4 @@
 .eggs/
 *.egg-info/
 sample.sqlite
+docs/_build

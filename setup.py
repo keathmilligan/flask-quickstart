@@ -5,12 +5,37 @@ Flask RESTful Quick Start Setup
 import sys
 import os
 from setuptools import setup
+from setuptools import Command
 from setuptools.command.test import test as TestCommand
-from setuptools.command.develop import develop as DevelopCommand
+from datetime import datetime
 
-# check python version
-if sys.version_info < (3,3):
-    sys.exit('Python >= 3.3 is required. Your version:\n'+sys.version)
+NAME = 'flask-quickstart'
+VERSION = '0.1'
+AUTHOR = 'Keath Milligan'
+REQUIRED_PYTHON_VERSION = (2, 7)
+PACKAGES = ['sample']
+INSTALL_DEPENDENCIES = [
+    'Flask',
+    'Flask-SQLAlchemy',
+    'Flask-Marshmallow',
+    'Marshmallow-SQLAlchemy',
+    'Flask-JWT'
+]
+SETUP_DEPENDENCIES = [
+]
+TEST_DEPENDENCIES = [
+    'pytest'
+]
+EXTRA_DEPENDENCIES = {
+    'dev': [
+        'pytest',
+        'flake8',
+        'Sphinx'
+    ]
+}
+
+if sys.version_info < REQUIRED_PYTHON_VERSION:
+    sys.exit('Python >= 2.7 is required. Your version:\n'+sys.version)
 
 
 class PyTest(TestCommand):
@@ -34,30 +59,44 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-# installation dependencies
-install_dependencies = [
-    'Flask',
-    'Flask-SQLAlchemy',
-    'Flask-Marshmallow',
-    'Marshmallow-SQLAlchemy',
-    'Flask-JWT'
-]
+class BuildDocs(Command):
+    """
+    Build Documentation
+    """
 
-# setup dependencies
-setup_dependencies = []
+    user_options = []
 
-# test dependencies
-test_dependencies = [
-    'pytest'
-]
+    def initialize_options(self):
+        pass
+
+    def finalize_options(self):
+        pass
+
+    def run(self):
+        import sphinx
+        metadata = self.distribution.metadata
+        docs = os.path.join(os.getcwd(), 'docs')
+        sphinx.main(['',
+                     '-D', 'project='+metadata.name,
+                     '-D', 'copyright={}, {}'.format(datetime.now().year,
+                                                     metadata.author),
+                     '-D', 'version='+metadata.version,
+                     '-D', 'release='+metadata.version,
+                     docs, os.path.join(docs, '_build')])
+
 
 setup(
-    name='flask-quickstart',
-    version='0.1',
-    packages=['sample'],
+    name=NAME,
+    version=VERSION,
+    author=AUTHOR,
+    packages=PACKAGES,
     include_package_data=True,
-    install_requires=install_dependencies,
-    setup_requires=setup_dependencies,
-    tests_require=test_dependencies,
-    cmdclass={'test': PyTest}
+    install_requires=INSTALL_DEPENDENCIES,
+    setup_requires=SETUP_DEPENDENCIES,
+    tests_require=TEST_DEPENDENCIES,
+    extras_require=EXTRA_DEPENDENCIES,
+    cmdclass={
+        'test': PyTest,
+        'doc': BuildDocs
+    }
 )
