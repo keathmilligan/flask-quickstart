@@ -29,16 +29,8 @@ Clone or download the repo into a working directory. cd into this directory.
 Now create a Python virtual environment for this project with:
 
 ```
-pyvenv .virtualenv
-```
-
-or
-
-```
 python -m venv .virtualenv
 ```
-
-if the `pyvenv` command does not exist on your system.
 
 ### Activate the Virtual Environment
 
@@ -59,10 +51,10 @@ On Windows:
 Now run:
 
 ```
-pip install --editable .
+pip install -e .[dev]
 ```
 
-This will install the packages the project depends on.
+This will install the packages the project depends on along with some additional packages for development.
 
 ### Run the Unit Tests
 
