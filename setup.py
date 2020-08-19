@@ -1,25 +1,23 @@
+# pylint: disable=W0201, C0415
 """
 Flask RESTful Quick Start Setup
 """
 
 import sys
-import os
 from setuptools import setup
-from setuptools import Command
 from setuptools.command.test import test as TestCommand
-from datetime import datetime
 
 NAME = 'flask-quickstart'
-VERSION = '0.1'
+VERSION = '0.2'
 AUTHOR = 'Keath Milligan'
-REQUIRED_PYTHON_VERSION = (2, 7)
+REQUIRED_PYTHON_VERSION = (3, 8)
 PACKAGES = ['sample']
 INSTALL_DEPENDENCIES = [
     'Flask',
     'Flask-SQLAlchemy',
     'Flask-Marshmallow',
     'Marshmallow-SQLAlchemy',
-    'Flask-JWT'
+    'flask-jwt-extended'
 ]
 SETUP_DEPENDENCIES = [
 ]
@@ -29,13 +27,18 @@ TEST_DEPENDENCIES = [
 EXTRA_DEPENDENCIES = {
     'dev': [
         'pytest',
-        'flake8',
+        'pylint',
+        'pylint-flask',
+        'pylint-flask-sqlalchemy'
+    ],
+    'doc': [
         'Sphinx'
     ]
 }
 
 if sys.version_info < REQUIRED_PYTHON_VERSION:
-    sys.exit('Python >= 2.7 is required. Your version:\n'+sys.version)
+    sys.exit(f'Python >= {REQUIRED_PYTHON_VERSION[0]}.{REQUIRED_PYTHON_VERSION[1]}'
+             ' is required. Your version: {sys.version}')
 
 
 class PyTest(TestCommand):
@@ -59,32 +62,6 @@ class PyTest(TestCommand):
         sys.exit(errno)
 
 
-class BuildDocs(Command):
-    """
-    Build Documentation
-    """
-
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        import sphinx
-        metadata = self.distribution.metadata
-        docs = os.path.join(os.getcwd(), 'docs')
-        sphinx.main(['',
-                     '-D', 'project='+metadata.name,
-                     '-D', 'copyright={}, {}'.format(datetime.now().year,
-                                                     metadata.author),
-                     '-D', 'version='+metadata.version,
-                     '-D', 'release='+metadata.version,
-                     docs, os.path.join(docs, '_build')])
-
-
 setup(
     name=NAME,
     version=VERSION,
@@ -96,7 +73,6 @@ setup(
     tests_require=TEST_DEPENDENCIES,
     extras_require=EXTRA_DEPENDENCIES,
     cmdclass={
-        'test': PyTest,
-        'doc': BuildDocs
+        'test': PyTest
     }
 )

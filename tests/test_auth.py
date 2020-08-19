@@ -1,9 +1,10 @@
+#pylint: disable=import-outside-toplevel,invalid-name,redefined-outer-name
 """
 Test Authentication Functions
 """
 
-import pytest
 import json
+import pytest
 
 
 @pytest.fixture
@@ -63,7 +64,7 @@ def test_access_granted(client):
     access_token = data['access_token']
     assert 'access_token' in data
     rv = client.get('/api/auth',
-                    headers={'Authorization': 'JWT '+access_token})
+                    headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
     data = json.loads(rv.data.decode('utf-8'))
     assert data['current_identity'] == 'user2'
@@ -76,7 +77,8 @@ def test_access_denied_no_token(client):
 
 
 def test_access_denied_invalid_token(client):
+    # pylint: disable=C0301
     """Make sure access is denied with an invalid token"""
     rv = client.get('/api/auth',
-                    headers={'Authorization': 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6MSwiaWF0IjoxNDQ0OTE3NjQwLCJuYmYiOjE0NDQ5MTc2NDAsImV4cCI6MTQ0NDkxNzk0MH0.KPmI6WSjRjlpzecPvs3q_T3cJQvAgJvaQAPtk1abC_E'})  # noqa:E501
-    assert rv.status_code == 401
+                    headers={'Authorization': 'Bearer eyK0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTc4NTQ4OTQsIm5iZiI6MTU5Nzg1NDg5NCwianRpIjoiZmI4NjZlZDAtMjg0Zi00YzAzLWI3MzktMTQzNjdkMjFlZjIzIiwiZXhwIjoxNTk3ODU1Nzk0LCJpZGVudGl0eSI6InVzZXIyIiwiZnJlc2giOmZhbHNlLCJ0eXBlIjoiYWNjZXNzIn0.a9FRgAtcehRAiG_b4zQK54t96VbKfx8O_sjCf5wz4o0'})
+    assert (rv.status_code == 401 or rv.status_code == 422)

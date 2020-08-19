@@ -1,11 +1,12 @@
+#pylint: disable=import-outside-toplevel,invalid-name,redefined-outer-name
 """
 Sample Tests
 Test the Contacts API
 """
 
-import pytest
 import json
 from datetime import datetime
+import pytest
 
 
 # this fixture just uses the sample database for read-only operations
@@ -42,7 +43,7 @@ def test_get(api_fixture):
     """Make sure a single contact can be retrieved"""
     client, access_token = api_fixture
     rv = client.get('/api/contacts/1',
-                    headers={'Authorization': 'JWT '+access_token})
+                    headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
     data = json.loads(rv.data.decode('utf-8'))
     assert 'first_name' in data
@@ -53,7 +54,7 @@ def test_get_all(api_fixture):
     """Make sure all contacts can be retrieved"""
     client, access_token = api_fixture
     rv = client.get('/api/contacts',
-                    headers={'Authorization': 'JWT '+access_token})
+                    headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
     data = json.loads(rv.data.decode('utf-8'))
     assert len(data) == 1000
@@ -71,7 +72,7 @@ def test_put(api_fixture):
     }
     rv = client.put('/api/contacts', data=json.dumps(data),
                     content_type='application/json',
-                    headers={'Authorization': 'JWT '+access_token})
+                    headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
 
 
@@ -84,11 +85,11 @@ def test_post(api_fixture):
     }
     rv = client.post('/api/contacts/10', data=json.dumps(data),
                      content_type='application/json',
-                     headers={'Authorization': 'JWT '+access_token})
+                     headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
     # make sure it actually got updated
     rv = client.get('/api/contacts/10',
-                    headers={'Authorization': 'JWT '+access_token})
+                    headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
     data = json.loads(rv.data.decode('utf-8'))
     assert data['last_name'] == 'Updated Last Name'
@@ -99,9 +100,9 @@ def test_delete(api_fixture):
     """Make sure a contact can be deleted"""
     client, access_token = api_fixture
     rv = client.delete('/api/contacts/100',
-                       headers={'Authorization': 'JWT '+access_token})
+                       headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 200
     # make sure it actually got deleted
     rv = client.get('/api/contacts/100',
-                    headers={'Authorization': 'JWT '+access_token})
+                    headers={'Authorization': 'Bearer '+access_token})
     assert rv.status_code == 404

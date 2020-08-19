@@ -1,0 +1,12 @@
+[MASTER]
+load-plugins=pylint_flask,pylint_flask_sqlalchemy
+
+[MESSAGES CONTROL]
+disable=too-few-public-methods,
+        missing-class-docstring,
+        missing-function-docstring,
+        no-self-use,
+        no-else-return,
+        cyclic-import,
+        too-many-ancestors,
+        unused-argument

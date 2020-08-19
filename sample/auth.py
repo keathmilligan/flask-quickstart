@@ -3,14 +3,15 @@ Authenticaton Functions
 TODO: replace with a real authentication backend
 """
 
-from flask_jwt import JWT
+from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity
 from werkzeug.security import safe_str_cmp
 from . import app
 
 
-class User(object):
-    def __init__(self, id, username, password):
-        self.id = id
+class User:
+    """Example user object"""
+    def __init__(self, user_id, username, password):
+        self.id = user_id  # pylint: disable=invalid-name
         self.username = username
         self.password = password
 
@@ -36,15 +37,15 @@ def authenticate(username, password):
     user = username_table.get(username, None)
     if user and safe_str_cmp(user.password.encode('utf-8'),
                              password.encode('utf-8')):
-        return user
+        return create_access_token(identity=user.username)
+    return None
 
 
-def identity(payload):
+def get_user():
     """
-    Get user by ID
+    Get user from identity
     """
-    user_id = payload['identity']
-    return userid_table.get(user_id, None)
+    return username_table.get(get_jwt_identity(), None)
 
 
-jwt = JWT(app, authenticate, identity)
+jwt = JWTManager(app)

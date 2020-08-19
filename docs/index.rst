@@ -1,24 +1,20 @@
-.. Flask Quick-Start documentation master file, created by
-   sphinx-quickstart on Fri Oct 14 14:36:31 2016.
+.. sample documentation master file, created by
+   sphinx-quickstart on Tue Aug 18 19:18:23 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Flask Quick-Start's documentation!
-==============================================
-
-Contents:
+Welcome to sample's documentation!
+==================================
 
 .. toctree::
    :maxdepth: 2
+   :caption: Contents:
 
 
 
 Indices and tables
 ==================
 
-.. Remove modindex if you do not intend to generate API docs
-
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

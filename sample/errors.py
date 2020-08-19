@@ -18,12 +18,12 @@ def error_handler(error):
             'name': error.name,
             'description': error.description
         }), error.code
-    else:
-        return jsonify({
-            'statusCode': 500,
-            'name': 'Internal Server Error',
-            'description': 'An unknown error has occurred'
-        }), 500
+
+    return jsonify({
+        'statusCode': 500,
+        'name': 'Internal Server Error',
+        'description': 'An unknown error has occurred'
+    }), 500
 
 # common errors - add others as needed
 app.register_error_handler(400, error_handler)

@@ -16,7 +16,8 @@ class Contact(db.Model):
     created = db.Column(db.DateTime)
 
 
-class ContactSchema(ma.ModelSchema):
+class ContactSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Contact
+        load_instance = True
     id = field_for(Contact, 'id', dump_only=True)
