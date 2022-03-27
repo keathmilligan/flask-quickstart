@@ -1,5 +1,5 @@
-RESTful Flask Application Quick Start Template
-==============================================
+Flask Application Quick Start Template
+======================================
 
 This repo provides a quick-start template for creating a stand-alone web application using the [Flask](http://flask.pocoo.org/) micro-framework for Python 3.8+. You can use this template as a basis for an app that will serve HTML and other content or as a starting point for an API-only service that will be paired with an SPA (React, Angular, etc.) or some other type of client.
 
