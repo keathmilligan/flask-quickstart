@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1>{% block title %}Contacts{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <p><a href="{{ url_for('contacts.new_contact') }}">Create new contact</a></p>
+
+  {% for contact in contacts %}
+    <div class="contact"><a href="{{ url_for('contacts.get_contact', contact_id=contact.id) }}">
+      {{ contact.first_name }}
+      {{ contact.last_name }}
+      {{ contact.email }}
+      {{ contact.phone }}
+      </a>
+    </div>
+  {% endfor %}
+
+  <p><strong>{{ contacts | length }}</strong> contacts</p>
+
+{% endblock %}

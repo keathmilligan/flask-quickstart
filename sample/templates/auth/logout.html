@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1>{% block title %}Log Out{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <div class="mb-3">
+      <h3>Log out?</h3>
+    </div>
+    <button type="submit" class="btn btn-primary">Log Out</button>
+    <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+  </form>
+{% endblock %}

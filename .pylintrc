@@ -2,11 +2,13 @@
 load-plugins=pylint_flask,pylint_flask_sqlalchemy
 
 [MESSAGES CONTROL]
-disable=too-few-public-methods,
-        missing-class-docstring,
-        missing-function-docstring,
-        no-self-use,
+disable=assigning-non-slot,
+        invalid-name,
+        fixme,
+        inconsistent-return-statements,
         no-else-return,
-        cyclic-import,
-        too-many-ancestors,
-        unused-argument
+        no-self-use,
+        cyclic-import
+
+[TYPECHECK]
+ignored-classes=scoped_session

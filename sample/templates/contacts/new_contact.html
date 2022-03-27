@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1>{% block title %}New Contact{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <div class="mb-3">
+      <label for="first_name" class="form-label">First Name</label>
+      <input name="first_name" id="first_name" required class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label for="last_name" class="form-label">Last Name</label>
+      <input name="last_name" id="last_name" required class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input name="email" id="email" required class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label for="phone" class="form-label">Phone</label>
+      <input name="phone" id="phone" required class="form-control">
+    </div>
+
+    <div>
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="button" class="btn btn-secondary" onclick="history.back()">Cancel</button>
+    </div>
+  </form>
+{% endblock %}

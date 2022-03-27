@@ -1,70 +1,104 @@
-RESTful Flask Application Quick Start
-=====================================
+RESTful Flask Application Quick Start Template
+==============================================
 
-This repo provides a quick-start template for creating a RESTful web application using the [Flask](http://flask.pocoo.org/) microframework for Python 3.8+.
+This repo provides a quick-start template for creating a stand-alone web application using the [Flask](http://flask.pocoo.org/) micro-framework for Python 3.8+. You can use this template as a basis for an app that will serve HTML and other content or as a starting point for an API-only service that will be paired with an SPA (React, Angular, etc.) or some other type of client.
 
 Features:
-* Flask 1.1.x.
+* Flask 2.x and blueprints
+* Jinja2 HTML templates
 * SQLAlchemy database models
 * Marshmallow for object marshalling
 * JSON Web Token (JWT) authentication
-* Pytest unit-tests
-
-This is a "pure RESTful" application, it exposes only RESTful APIs and does not generate any HTML, perfect for pairing with a single-page-application (SPA) web front-end or mobile app.
+* PyTest unit-tests
+* Serve in production with waitress
+* Pylint and Black
 
 See [RESTful Flask application quick-start](http://keathmilligan.net/restful-flask-application-quick-start/) for more info.
 
-
 ## Getting Started
 
-You will need Python 3.8 or later. Use the appropriate installation method for your system to install Python and make sure it is in your path.
+You will need Python 3.8 or later. Use the appropriate installation method for your system to install Python and make sure it is in your path. The template currently targets Python 3.10 (recommended).
 
-### Checkout
+This project also uses [pipenv](https://pipenv.pypa.io/en/latest/) to manage dependencies and its virtual environment. You will need to install it if you do not already have it.
 
-Clone or download the repo into a working directory. cd into this directory.
+### Using the template
 
-### Create a Python Virtual Environment
+To use the template, click the **Use this template** button in the [Github repository](https://github.com/keathmilligan/flask-quickstart) to create a new project using this code as a basis. Alternatively, you can clone the repository locally.
 
-Now create a Python virtual environment for this project with:
+### Install dependencies
 
-```
-python -m venv .virtualenv
-```
+> The template currently expects Python 3.10, if you need to use an older version, you will need to modify the `Pipfile`.
 
-### Activate the Virtual Environment
-
-Now activate the virtual environment. on macOS, Linux and Unix systems, use:
+Use [pipenv](https://pipenv.pypa.io/en/latest/) to create a virtual environment and install the dependencies:
 
 ```
-source .virtualenv/bin/activate
+pipenv install --dev
 ```
 
-On Windows:
+The `--dev` option will also install the optional development dependencies such as `pylint` and `pytest`.
 
-```
-.virtualenv\Scripts\activate.bat
-```
+## Running
 
-### Install the Development Environment
+### Create the database
 
-Now run:
+Before running the app for the first time, you must initialize the database with:
 
-```
-pip install -e .[dev,doc]
-```
-
-This will install the packages the project depends on along with some additional packages for development. `doc` is optional - it installs Sphinx for documenting your project.
-
-### Run the Unit Tests
-
-To make sure everything is installed and working correctly, run:
-
-```
-pytest
+Linux/MacOS:
+```bash
+export FLASK_APP=sample; pipenv run flask initdb
 ```
 
-This will produce a lot of output, but toward the end, you should see something like:
+Windows Powershell
+```powershell
+$env:FLASK_APP = "sample"; pipenv run flask initdb
+```
 
+### Running in Development
+
+To start the development server with automatic reloading, run:
+
+Linux/MacOS:
+```bash
+export FLASK_APP=sample; pipenv run flask run --debugger --reload --with-threads
+```
+
+Windows Powershell
+```powershell
+$env:FLASK_APP = "sample"; pipenv run flask run --debugger --reload --with-threads
+```
+
+The app will be available with `http://localhost:5000`. Log in with the test user name `user1` and password `1234`:
+![screenshot](/docs/images/screenshot.png)
+
+Click the **Contacts** link to list and create sample data.
+
+![contacts](/docs/images/contacts.png)
+
+Edit a contact:
+
+![edit contact](/docs/images/edit-contact.png)
+
+### Running in Production
+
+To serve the app with `waitress` for production use, run:
+
+```
+pipenv run python -m sample
+```
+
+Hit `Ctrl-C` to abort.
+
+This is just a starting point for production deployment - see the [waitress docs](https://docs.pylonsproject.org/projects/waitress/en/latest/usage.html) for more info.
+
+## Test
+
+Run the `pytest` unit tests with:
+
+```
+pipenv run pytest
+```
+
+You should see something like:
 ```
 ======================================================= test session starts ========================================================
 platform darwin -- Python 3.5.2, pytest-3.0.3, py-1.4.31, pluggy-0.4.0
@@ -77,48 +111,40 @@ tests/test_contacts.py .....
 ==================================================== 11 passed in 2.90 seconds =====================================================
 ```
 
-## Run the Server
+## REST API Usage
 
-To start the web server, run
-
-### Linux/MacOS:
-```
-export FLASK_APP=sample
-flask run
-```
-
-### Windows (cmd):
-```
-set FLASK_APP=sample
-flask run
-```
-
-### Windows (PowerShell):
-```
-$env:FLASK_APP = "sample"
-flask run
-```
-
-The API will available at http://localhost:5000.
-
-Note that because this app does not generate HTML itself, requesting this URL with a web browser directly will just return a JSON error message. Use a RESTful client application to authenticate and make requests.
-
-## Testing with PostMan
-
-You can test your RESTful APIs with [PostMan](https://www.postman.com/) or another HTTP request tool.
+Use an HTTP client such as [PostMan](https://www.postman.com/) or the VSCode [Thunder Client](https://marketplace.visualstudio.com/items?itemName=rangav.vscode-thunder-client) extension to experiment with the REST API endpoints:
 
 ### Authenticate
 
-Send a POST request to `http://127.0.0.1:5000/api/login` with the username/password to login and get an access token:
+Before you can access secured endpoints, you must obtain a JWT access token. Send a POST request to `http://127.0.0.1:5000/api/login` with the username/password to login and get an access token and a refresh token:
 
-![Authenticate](screenshots/postman1.png)
+![Authenticate](/docs/images/rest-login.png)
 
-Copy the access token to the clipboard - you will need it for subsequent requests.
+Copy the access token to the clipboard - you will need it for subsequent requests. Also, save the refresh token somewhere, we'll use it later.
 
-Create a new GET request to `http://127.0.0.1:5000/api/auth` and set the "Authorization" type to "Bearer Token". Paste the access token into the Token field and send the request:
+To verify that you have a valid access token, create a new GET request to `http://127.0.0.1:5000/api/auth` and set the "Authorization" type to "Bearer Token" and paste the access token into the Token field and send the request (alternatively, set the `Authorization` header to "Bearer `<access token>`").
 
-![Verify Authentication](screenshots/postman2.png)
+![Verify Authentication](/docs/images/rest-get-auth.png)
 
-### Get All Contacts
+### Refresh Access Token
 
-![Get Contacts](screenshots/postman3.png)
+If the access token has expired or is about to expire, you can obtain a new one by using the `api/refresh` endpoint:
+
+![Refresh Access Token](/docs/images/rest-refresh.png)
+
+### Use Sample Data Endpoints
+
+Now you can use the sample contacts endpoints to list, create, update and delete entries:
+
+![Get Contacts](/docs/images/rest-contacts.png)
+
+## Next Steps
+
+### Delete the stuff you don't need
+
+For example, if you don't need to serve HTML, you can remove the `templates` directory and the page-oriented views from the blueprints. Alternatively, if you don't need to serve RESTful resources, you can delete the API endpoints.
+
+### Add a real authentication backend
+
+A real application will likely use some external service to lookup users, validate passwords, control access, etc. Enhance the `auth.py` module with your own authentication/authorization logic.

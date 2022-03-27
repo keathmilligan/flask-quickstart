@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1>{% block title %}Home{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  {% if g.user %}
+    <p><a href="{{ url_for('contacts.list_contacts') }}">Contacts</a></p>
+  {% else %}
+    <p><a href="{{ url_for('auth.login_page') }}">Login to get started</a></p>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1>{% block title %}Contact {{ contact.id }}{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <p>First Name, Last Name: <strong>{{ contact.first_name }} {{ contact.last_name }}</strong></p>
+  <p>Email: <strong>{{ contact.email }}</strong></p>
+  <p>Phone: <strong>{{ contact.phone }}</strong></p>
+  <p>Created: <strong>{{ contact.created }}</strong></p>
+
+  <ul>
+    <li><a href="{{ url_for('contacts.update_contact', contact_id=contact.id) }}">Edit Contact</a></li>
+    <li><a href="{{ url_for('contacts.delete_contact', contact_id=contact.id) }}">Delete Contact</a></li>
+    <li><a href="{{ url_for('contacts.list_contacts') }}">Back to list</a></li>
+  </ul>
+{% endblock %}

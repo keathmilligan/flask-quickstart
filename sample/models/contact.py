@@ -1,13 +1,16 @@
 """
 Sample Database Model Definition
 """
+# pylint: disable=too-few-public-methods,too-many-ancestors
 
 from marshmallow_sqlalchemy import field_for
-from .. import db, ma
+from ..db import db, ma
 
 
 class Contact(db.Model):
-    __tablename__ = 'contacts'
+    """Contact object"""
+
+    __tablename__ = "contacts"
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
@@ -17,7 +20,12 @@ class Contact(db.Model):
 
 
 class ContactSchema(ma.SQLAlchemyAutoSchema):
+    """Contact schema"""
+
     class Meta:
+        """Schema metadata"""
+
         model = Contact
         load_instance = True
-    id = field_for(Contact, 'id', dump_only=True)
+
+    id = field_for(Contact, "id", dump_only=True)

@@ -1,7 +1,14 @@
 {
-    "DEBUG": true,
+    "FLASK_DEBUG": true,
     "SQLALCHEMY_DATABASE_URI": "sqlite:///../sample.sqlite",
     "SQLALCHEMY_TRACK_MODIFICATIONS": false,
     "SECRET_KEY": "Super secret key",
-    "JWT_AUTH_URL_RULE": null
+    "JWT_COOKIE_SECURE": false,
+    "JWT_TOKEN_LOCATION": ["headers", "cookies"],
+    "JWT_COOKIE_CSRF_PROTECT": false,
+    "JWT_SECRET_KEY": "Super JWT secret",
+    "JWT_ACCESS_TOKEN_EXPIRES": 3600,
+    "JWT_REFRESH_TOKEN_EXPIRES": 2592000,
+    "TEMPLATES_AUTO_RELOAD": true,
+    "EXPLAIN_TEMPLATE_LOADING": true
 }

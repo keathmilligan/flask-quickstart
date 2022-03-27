@@ -1,35 +1,42 @@
-# pylint: disable=C0413
 """
 Flask Quick-Start Template
 Application bootstrap
 """
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-
-app = Flask(__name__)
-app.config.from_json('../config.json')
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
+import json
+import os.path
+from flask import Flask, render_template
 
 
-def init_db():
-    """Initialize the database"""
-    with app.open_resource('resources/schema.sql', 'r') as schema:
-        conn = db.engine.raw_connection()
-        conn.executescript(schema.read())
-        conn.close()
+def create_app():
+    """
+    Create application
+    """
+    app = Flask(__name__)
+    app.config.from_file(os.path.join(app.root_path, "..", "config.json"), json.load)
 
+    # pylint: disable=import-outside-toplevel,wrong-import-position,unused-import
 
-# register error handlers
-from . import errors
+    # setup database
+    from . import db
 
-# register CLI commands
-from . import commands
+    db.init_app(app)
 
-# initialize jwt
-from . import auth
+    # setup authentication
+    from . import auth
 
-# load & register APIs
-from .api import *
+    auth.init_jwt(app)
+
+    # register blueprints
+    app.register_blueprint(auth.blueprint)
+    from . import contacts
+
+    app.register_blueprint(contacts.blueprint)
+
+    # register index route
+    @app.route("/")
+    def index():
+        """Sample app index"""
+        return render_template("index.html")
+
+    return app
